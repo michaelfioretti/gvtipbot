@@ -95,7 +95,7 @@ module.exports = {
     newaccount: async(msg) => {
         let account = await DB.get('/users/' + msg.author.id)
         if (account) {
-            return helpers.replyToMsg(msg, "You already have an account!")
+            return helpers.replyToMsg(msg, "You already have an account! Your public key is " + account.publicKey)
         }
 
         account = await stellar.generateAccount(msg.author.id)
