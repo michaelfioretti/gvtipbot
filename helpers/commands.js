@@ -99,7 +99,6 @@ module.exports = {
         }
 
         account = await stellar.generateAccount(msg.author.id)
-        console.log("new one is: ", account)
-        helpers.replyToMsg(msg, "Account generated!")
+        helpers.replyToMsg(msg, "Account generated! Your public key is " + account.publicKey)
     }
 }
