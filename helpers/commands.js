@@ -10,8 +10,18 @@ module.exports = {
     withdraw: async(msg) => {
         helpers.replyToMsg(msg, "Starting withdraw...")
         let account = await DB.get('/users/' + msg.author.id)
+        .catch(e => {
+            console.log("error getting account in withdraw: ", e)
+            return helpers.replyToMsg(msg, "There was an error creating your withdraw. Please try again.")
+        })
+
         let toAddress = msg.content.split('/withdraw ')[1].trim()
         let withdrawResponse = await stellar.withdraw(msg.author.id, account, toAddress)
+        .catch(e => {
+            console.log("error in withdrawResponse: ", e)
+            return helpers.replyToMsg(msg, "There was an error creating your withdraw. Please try again.")
+        })
+        
         helpers.replyToMsg(msg, "Your GV balance has successfully been sent to "  + toAddress + '!')
 
     },
@@ -40,7 +50,7 @@ module.exports = {
             console.log("error getting balacne: ", e)
             return helpers.replyToMsg(msg, "Sorry! There was an error getting your balance. Please try again.")
         })
-        
+
         if (!account) return helpers.replyToMsg(msg, "You have no account yet!")
 
         let balances = await stellar.getBalances(account.publicKey)
@@ -98,9 +108,9 @@ module.exports = {
             'Welcome to the Wacoinda GV Tipping Bot!\n',
             'If you want to start tipping users on Discord, there are a couple of things you need to do:\n',
             "1. Create a new account by running `@gvtipbot /newaccount`. This will create your account. Note that this is separate from your Fa'eva Wallet or StellarX Account",
-            '2. Send a small amount of XLM (we recommend 3 or more) to the public key that was sent to you',
+            '2. Go to StellarX and click on "Wallet". On that page, there will be a tab that says "Send Tokens". Paste the public key from Discord and send 3 to 4 XLM, and hit "Send"',
             '3. Run `@gvtipbot /verify` to verify your account and set up your trustline',
-            '4. Send your wallet some GV',
+            '4. Go back to StellarX, to the "Send Tokens" page, and send CJ to the Discord public key by clicking the dropdown and selecting "CJS". Remember that there are 1,000,000 GV in a CJ, so if you only want to fund it with 100,000 GV, you would send 0.1 CJ',
             '5. Check you balance by running `@gvtipbot /balance` - this will show you balance in XLM and GV.',
             '6. Start tipping!',
             '\n**Please note that all response messages from the bot are sent to you via Direct Message**',
