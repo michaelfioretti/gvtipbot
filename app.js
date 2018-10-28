@@ -109,8 +109,14 @@ async function sendCj(msg, fromUid, toUid, amount, gvValue) {
     sendgvtxfork.on('message', async (m) => {
         if(m.success) {
             let saved = await DB.set('/transactions/' + fromUid + '/' + m.tx.hash, m.tx)
+            
+            // Get price data
+            let priceData = await DB.get('/market_data')
+            let currentDollarPrice = parseFloat(priceData.price.substr(1))
+            let dollarPricePerGv = math.eval(currentDollarPrice / 1e6)
+            let priceOfAmountInDollars = math.eval(dollarPricePerGv * gvValue)
             helpers.replyToMsg(msg, 'Transaction sent! You can view it at the following link: ' + m.tx.link)
-            msg.channel.send('Big thanks to <@' + fromUid + '> for sending <@' + toUid + '> ' + helpers.formatMoneyString(Number(gvValue)) + ' GV!')
+            msg.channel.send('Big thanks to <@' + fromUid + '> for sending <@' + toUid + '> ' + helpers.formatMoneyString(Number(gvValue)) + ' GV (' + helpers.formatMoneyString(Number(priceOfAmountInDollars)) + ')!')
         } else {
             helpers.replyToMsg(msg, "There was an error sending your transaction! Sorry about that :frowning: please try again")
         }
