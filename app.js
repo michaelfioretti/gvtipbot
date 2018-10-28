@@ -69,7 +69,9 @@ client.on('message', async msg => {
 
             if (!userAccount) {
                 helpers.replyToMsg(msg, "You currently do not have an account! Generating one now...")
-                let account = await stellar.generateAccount(fromUid)
+                let account = await stellar.generateAccount(fromUid).catch(e => {
+                    return console.log("error creating account: ", e)
+                })
                 helpers.replyToMsg(msg, "Your public key is " + account.publicKey + ". Make sure you fund this account with GV/CJ and XLM!")
             } else if (isNaN(tipAmount) || tipAmount === 0 || tipAmount < 0) {
                 helpers.replyToMsg(msg, 'Invalid tip amount!')
