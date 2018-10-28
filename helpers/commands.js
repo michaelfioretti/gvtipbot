@@ -119,7 +119,7 @@ module.exports = {
         account = await stellar.generateAccount(msg.author.id)
         .catch(e => {
             console.log("error creating account: ", e)
-            return helpers.replyToMsg(msg, ""There was an error creating your account. Please try again.)  
+            return helpers.replyToMsg(msg, "There was an error creating your account. Please try again.")  
         })
         helpers.replyToMsg(msg, "Account generated! Your public key is " + account.publicKey)
     }
