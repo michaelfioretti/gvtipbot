@@ -36,6 +36,11 @@ module.exports = {
      */
     balance: async(msg) => {
         let account = await DB.get('/users/' + msg.author.id)
+        .catch(e => {
+            console.log("error getting balacne: ", e)
+            return helpers.replyToMsg(msg, "Sorry! There was an error getting your balance. Please try again.")
+        })
+        
         if (!account) return helpers.replyToMsg(msg, "You have no account yet!")
 
         let balances = await stellar.getBalances(account.publicKey)
@@ -92,7 +97,7 @@ module.exports = {
         let sentences = [
             'Welcome to the Wacoinda GV Tipping Bot!\n',
             'If you want to start tipping users on Discord, there are a couple of things you need to do:\n',
-            '1. Create a new account by running `@gvtipbot /newaccount`. This will create your account',
+            "1. Create a new account by running `@gvtipbot /newaccount`. This will create your account. Note that this is separate from your Fa'eva Wallet or StellarX Account",
             '2. Send a small amount of XLM (we recommend 3 or more) to the public key that was sent to you',
             '3. Run `@gvtipbot /verify` to verify your account and set up your trustline',
             '4. Send your wallet some GV',
