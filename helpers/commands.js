@@ -23,6 +23,10 @@ module.exports = {
     verify: async(msg) => {
         helpers.replyToMsg(msg, "Verifying your account...")
         let result = await stellar.setUpTrustline(msg.author.id)
+        .catch(e => {
+            console.log("error verify: ", e)
+            return helpers.replyToMsg(msg, "There was an error verifying your account. Please try again")
+        })
         helpers.replyToMsg(msg, result.message)
     },
     /**
