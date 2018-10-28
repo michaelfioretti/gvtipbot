@@ -33,6 +33,7 @@ In any Discord channel that the bot is in, tag the user you want to tip, give th
 - `/balance` - Lists the balance of your tipping wallet
 - `/newaccount` - Creates a new wallet
 - `/verify` - Sets up your trustline for CJS (make sure you have XLM in your account!)
+- `/withdraw` - Sends your GV balance to the address you pass in. For example, if you ran `@gvtipbot /withdraw GDIOHVA65FW4ZJDUHPFFWMCA7LOTNHCP3SK7YT4LETQKYJDBGWZQYDA3`, then this would send your balance to `GDIOHVA65FW4ZJDUHPFFWMCA7LOTNHCP3SK7YT4LETQKYJDBGWZQYDA3`
 
 ## Donations
 Not required, but appreciated!

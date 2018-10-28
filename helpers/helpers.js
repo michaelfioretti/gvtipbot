@@ -24,6 +24,8 @@ module.exports = {
             return 'newaccount'
         } else if (message.indexOf('/verify') > -1) {
             return 'verify'
+        } else if (message.indexOf('/withdraw') > -1) {
+            return 'withdraw'
         }
     },
     /**

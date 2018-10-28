@@ -17,25 +17,6 @@ helpers.startCMCCron()
 client.on('ready', () => console.log('Bot started'));
 
 client.on('message', async msg => {
-
-    /*
-      Scenarios
-
-      1. User sends CJ to someone not on the platform:
-        - Create new account for user
-        - Send two messages:
-          - First for tx confirmation
-          - Second to TOUSER in a private DM that gives them
-          their account address
-      2. Balance confirmation BEFORE going through tx process
-      3. Test with live CJ (need to fund with GV and XLM)
-      4. Finish the following endpoints
-        - /withdraw <address>
-  
-      5. Add comments and clean up code and add license and README
-      6. Test with private group of 10 - 20 people
-     */
-
     // Prevent bots from calling the bot
     if (msg.author.bot) return
 
@@ -106,7 +87,7 @@ client.on('message', async msg => {
                 console.log("this many GV: ", tipAmount)
                 console.log("converting to CJ...")
                 let cjValue = math.eval(tipAmount / 1e6)
-                createAndSendTxToStellar(msg, fromUid, toUid, cjValue, tipAmount)
+                sendCj(msg, fromUid, toUid, cjValue, tipAmount)
             }
         }
 
@@ -115,9 +96,9 @@ client.on('message', async msg => {
 
 client.login(config.discord.secret);
 
-async function createAndSendTxToStellar(msg, fromUid, toUid, amount, gvValue) {
+async function sendCj(msg, fromUid, toUid, amount, gvValue) {
     var accounts = await Promise.all([DB.get('/users/' + fromUid), DB.get('/users/' + toUid)])
-    var sendtxfork = fork('sendtx.js', [
+    var sendgvtxfork = fork('sendgvtx.js', [
         fromUid,
         toUid,
         amount,
@@ -125,7 +106,7 @@ async function createAndSendTxToStellar(msg, fromUid, toUid, amount, gvValue) {
         accounts[1].publicKey
     ])
 
-    sendtxfork.on('message', async (m) => {
+    sendgvtxfork.on('message', async (m) => {
         if(m.success) {
             let saved = await DB.set('/transactions/' + fromUid + '/' + m.tx.hash, m.tx)
             helpers.replyToMsg(msg, 'Transaction sent! You can view it at the following link: ' + m.tx.link)
@@ -135,6 +116,6 @@ async function createAndSendTxToStellar(msg, fromUid, toUid, amount, gvValue) {
         }
 
         // Kill child since we don't need it anymore (\m/)
-        sendtxfork.kill('SIGHUP');
+        sendgvtxfork.kill('SIGHUP');
     });
 }
