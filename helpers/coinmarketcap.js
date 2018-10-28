@@ -2,8 +2,11 @@ const axios = require('axios')
 const cjId = config.coinMarketCap.cjId
 
 module.exports = {
+    /**
+     * Gets CJ data from Coin Market Cap and updates the database
+     * @return {Void}
+     */
     getPriceAndVolume: async() => {
-        console.log("updating market data")
         let marketData = await axios('https://pro-api.coinmarketcap.com/v1/cryptocurrency/quotes/latest?id=' + cjId, {
             headers: {
                 'X-CMC_PRO_API_KEY': config.coinMarketCap.apiKey

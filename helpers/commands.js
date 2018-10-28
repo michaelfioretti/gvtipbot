@@ -24,7 +24,7 @@ module.exports = {
         let balances = await stellar.getBalances(account.publicKey)
 
         let sentences = [
-            '\nYour Balances: '
+            '\nYour Balances for public key ' + account.publicKey + ': '
         ]
 
         balances.forEach(bal => {

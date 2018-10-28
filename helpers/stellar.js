@@ -9,7 +9,6 @@ module.exports = {
         return new Promise(async(resolve, reject) => {
             let userAccount = await DB.get('/users/' + uid)
 
-            console.log(userAccount)
             if (userAccount.verified) {
                 return resolve({
                     message: 'Your account has already been verified!'
@@ -27,7 +26,15 @@ module.exports = {
 
             transaction.sign(keypair);
 
-            let transactionResult = await server.submitTransaction(transaction).catch(console.log)
+            let transactionResult = await server.submitTransaction(transaction)
+            .catch(e => {
+                console.log("there was an error setting up trustline for account " + uid)
+                console.log("error: ", e)
+                
+                return resolve({
+                    message: "There was an error setting up your trustline. Sorry about that! Please try again."
+                })
+            })
             userAccount.verified = true
             let saved = await DB.set('/users/' + uid, userAccount)
             
