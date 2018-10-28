@@ -117,15 +117,15 @@ async function sendCj(msg, fromUid, toUid, amount, gvValue) {
             let priceOfAmountInDollars = math.eval(dollarPricePerGv * gvValue)
             helpers.replyToMsg(msg, 'Transaction sent! You can view it at the following link: ' + m.tx.link)
 
-            let channelResponseMessage = 'Big thanks to <@' + fromUid + '> for sending <@' + toUid + '> ' + helpers.formatMoneyString(Number(gvValue)) + '!'
+            let channelResponseMessage = 'Big thanks to <@' + fromUid + '> for sending <@' + toUid + '> ' + helpers.formatMoneyString(Number(gvValue)) + 'GV!'
             
             if(priceOfAmountInDollars.toFixed(2) != '0.00') {
                 channelResponseMessage = channelResponseMessage.substr(0, channelResponseMessage.length - 1)
-                channelResponseMessage += '($' + helpers.formatMoneyString(priceOfAmountInDollars) + ')!'
+                channelResponseMessage += ' ($' + helpers.formatMoneyString(priceOfAmountInDollars) + ')!'
             }
 
             msg.channel.send(channelResponseMessage)
-            
+
         } else {
             helpers.replyToMsg(msg, "There was an error sending your transaction! Sorry about that :frowning: please try again")
         }
