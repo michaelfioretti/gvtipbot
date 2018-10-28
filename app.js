@@ -77,7 +77,10 @@ client.on('message', async msg => {
                 helpers.replyToMsg(msg, 'Cannot detect who you wanted to tip, please mention the user to be tipped :innocent:')
             } else if (fromUid === toUid) {
                 helpers.replyToMsg(msg, 'You cannot tip yourself')
+            } else if(!userAccount.verified) {
+                return helpers.replyToMsg(msg, "Sorry! Your account hasn't been verified!")
             } else {
+
                 let toAccount = await DB.get('/users/' + toUid)
 
                 if (!toAccount) {
