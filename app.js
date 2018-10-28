@@ -112,15 +112,11 @@ async function sendCj(msg, fromUid, toUid, amount, gvValue) {
             
             // Get price data
             let priceData = await DB.get('/market_data')
-            console.log("priceData: ", priceData)
             let currentDollarPrice = parseFloat(priceData.price.substr(1))
-            console.log("currentDollarPrice: ", currentDollarPrice)
             let dollarPricePerGv = math.eval(currentDollarPrice / 1e6)
-            console.log("dollarPricePerGv: ", dollarPricePerGv)
             let priceOfAmountInDollars = math.eval(dollarPricePerGv * gvValue)
-            console.log("priceOfAmountInDollars: ", priceOfAmountInDollars)
             helpers.replyToMsg(msg, 'Transaction sent! You can view it at the following link: ' + m.tx.link)
-            msg.channel.send('Big thanks to <@' + fromUid + '> for sending <@' + toUid + '> ' + helpers.formatMoneyString(Number(gvValue)) + ' GV (' + helpers.formatMoneyString(Number(priceOfAmountInDollars)) + ')!')
+            msg.channel.send('Big thanks to <@' + fromUid + '> for sending <@' + toUid + '> ' + helpers.formatMoneyString(Number(gvValue)) + ' GV ($' + priceOfAmountInDollars + ')!')
         } else {
             helpers.replyToMsg(msg, "There was an error sending your transaction! Sorry about that :frowning: please try again")
         }
