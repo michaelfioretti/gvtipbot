@@ -84,6 +84,10 @@ client.on('message', async msg => {
                     return helpers.replyToMsg(msg, "Sorry! " + toUsername + " hasn't set up an account yet! Tell them to make an account and fund it with XLM!")
                 }
 
+                if(!toAccount.verified){
+                    return helpers.replyToMsg(msg, "Sorry! " + toUsername + " hasn't verified their account!")
+                }
+
                 console.log("this many GV: ", tipAmount)
                 console.log("converting to CJ...")
                 let cjValue = math.eval(tipAmount / 1e6)
@@ -117,7 +121,7 @@ async function sendCj(msg, fromUid, toUid, amount, gvValue) {
             let priceOfAmountInDollars = math.eval(dollarPricePerGv * gvValue)
             helpers.replyToMsg(msg, 'Transaction sent! You can view it at the following link: ' + m.tx.link)
 
-            let channelResponseMessage = 'Big thanks to <@' + fromUid + '> for sending <@' + toUid + '> ' + helpers.formatMoneyString(Number(gvValue)) + 'GV!'
+            let channelResponseMessage = 'Big thanks to <@' + fromUid + '> for sending <@' + toUid + '> ' + helpers.formatMoneyString(Number(gvValue)) + ' GV!'
             
             if(priceOfAmountInDollars.toFixed(2) != '0.00') {
                 channelResponseMessage = channelResponseMessage.substr(0, channelResponseMessage.length - 1)
