@@ -37,7 +37,7 @@ async function sendTx() {
 
     let transactionResult = await server.submitTransaction(transaction)
         .catch(e => {
-        	process.send({
+        	return process.send({
         		success: false,
         		error: e.response.data.extras
         	})
