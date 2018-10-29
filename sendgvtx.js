@@ -43,6 +43,8 @@ async function sendTx() {
         	})
         })
 
+    console.log("transactionResult: ", transactionResult)
+
     let txToSave = {
         hash: transactionResult.hash,
         fromPublicKey: sourcePublicKey,
