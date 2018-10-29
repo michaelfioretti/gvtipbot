@@ -26,6 +26,8 @@ module.exports = {
             return 'verify'
         } else if (message.indexOf('/withdraw') > -1) {
             return 'withdraw'
+        } else if (message.indexOf('/snoring') > -1) {
+            return 'snoring'
         }
     },
     /**
@@ -49,6 +51,6 @@ module.exports = {
         return (num).toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,')
     },
     getResponseMessage: () => {
-        
+
     }
 }

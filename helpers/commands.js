@@ -2,6 +2,9 @@ const axios = require('axios')
 const math = require('mathjs')
 
 module.exports = {
+    snoring: async(msg) => {
+        msg.channel.send("Ron, you gettin' fired on yo day off.")
+    },
     /**
      * Withdraws an amount of GV to the provided Stellar address
      * @param  {Message} msg Discord Message
@@ -21,7 +24,7 @@ module.exports = {
             console.log("error in withdrawResponse: ", e)
             return helpers.replyToMsg(msg, "There was an error creating your withdraw. Please try again.")
         })
-        
+
         helpers.replyToMsg(msg, "Your GV balance has successfully been sent to "  + toAddress + '!')
 
     },

@@ -53,6 +53,9 @@ client.on('message', async msg => {
         }
     })
 
+    console.log("here is the user: ", fromUsername)
+    console.log("here is their id: ", fromUid)
+
     var valid = msg.content.indexOf('GV') > -1 && tipbotMentioned
     var command = helpers.getCommand(msg.content)
 
