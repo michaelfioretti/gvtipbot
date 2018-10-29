@@ -2,9 +2,6 @@ const axios = require('axios')
 const math = require('mathjs')
 
 module.exports = {
-    snoring: async(msg) => {
-        msg.channel.send("Ron, you gettin' fired on yo day off.")
-    },
     /**
      * Withdraws an amount of GV to the provided Stellar address
      * @param  {Message} msg Discord Message
