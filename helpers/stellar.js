@@ -29,8 +29,8 @@ module.exports = {
                 amountToSend = cjBalance
                 assetToSend = new StellarSdk.Asset(config.cjAssetCode, config.cjIssuer)
             } else if (denomination === 'XLM') {
-                // We want to keep 2.5 XLM in the account
-                amountToSend = math.eval(xlmBalance + -2.5).toString()
+                // We want to keep 1 XLM in the account to reserve it
+                amountToSend = math.eval(xlmBalance + -1).toString()
                 assetToSend = StellarSdk.Asset.native()
             }
 

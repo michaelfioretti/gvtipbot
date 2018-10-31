@@ -133,7 +133,7 @@ module.exports = {
             '`/balance` - Lists the balance of your tipping wallet',
             '`/newaccount` - Creates a new wallet',
             '`/verify` - Sets up your trustline for CJS (make sure you have XLM in your account!)',
-            '`/withdraw` - Sends your GV balance to the address of your choice. Run it like this: `@gvtipbot /withdraw GDIOHVA65FW4ZJDUHPFFWMCA7LOTNHCP3SK7YT4LETQKYJDBGWZQYDA3`',
+            '`/withdraw` - Sends your GV balance to the address of your choice. Run it like this: `@gvtipbot /withdraw GDIOHVA65FW4ZJDUHPFFWMCA7LOTNHCP3SK7YT4LETQKYJDBGWZQYDA3 XLM` - right now you can withdraw XLM and GV, you just have to include the denomination',
             '\nMore to come soon! Feel free to post in the `wacoinda-tech-heads` for any questions!'
         ]
 
