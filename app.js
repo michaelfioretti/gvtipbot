@@ -20,6 +20,10 @@ client.on('message', async msg => {
     // Prevent bots from calling the bot
     if (msg.author.bot) return
 
+    if(config.testing){
+        return helpers.replyToMsg(msg, "Sorry! The gvtipbot is undergoing maintenance at the moment. Please try again later")
+    }
+
     var fromUid = msg.author.id
     var fromUsername = msg.author.username
     var toUid = ''
@@ -53,7 +57,7 @@ client.on('message', async msg => {
         }
     })
 
-    console.log("here is the user: ", fromUsername)
+    console.log("\nhere is the user: ", fromUsername)
     console.log("here is their id: ", fromUid)
 
     var valid = msg.content.indexOf('GV') > -1 && tipbotMentioned

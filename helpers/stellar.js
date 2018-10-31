@@ -13,9 +13,9 @@ module.exports = {
             let accountFromStellar = await server.loadAccount(sourcePublicKey)
             let balances = await stellar.getBalances(account.publicKey)
             let cjBalance = null
-            
+
             balances.forEach(b => {
-                if(b.asset_code && b.asset_code === config.cjAssetCode){
+                if (b.asset_code && b.asset_code === config.cjAssetCode) {
                     cjBalance = b.balance
                 }
             })
