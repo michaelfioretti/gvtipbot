@@ -2,28 +2,42 @@ const axios = require('axios')
 const DB = require('./db')
 const StellarSdk = require('stellar-sdk');
 const server = new StellarSdk.Server('https://horizon.stellar.org');
+const math = require('mathjs')
 StellarSdk.Network.usePublicNetwork();
 
 module.exports = {
-    withdraw: (fromUId, account, toAddress) => {
+    withdraw: (fromUId, account, toAddress, denomination) => {
         return new Promise(async(resolve, reject) => {
-            let cjAsset = new StellarSdk.Asset(config.cjAssetCode, config.cjIssuer);
             let sourceKeypair = StellarSdk.Keypair.fromSecret(account.secret);
             let sourcePublicKey = sourceKeypair.publicKey();
             let accountFromStellar = await server.loadAccount(sourcePublicKey)
             let balances = await stellar.getBalances(account.publicKey)
-            let cjBalance = null
+            let cjBalance = null,
+                xlmBalance = null,
+                amountToSend = null,
+                assetToSend = null
 
             balances.forEach(b => {
                 if (b.asset_code && b.asset_code === config.cjAssetCode) {
                     cjBalance = b.balance
+                } else if (b.asset_type === 'native') {
+                    xlmBalance = b.balance
                 }
             })
 
+            if(denomination === 'GV') {
+                amountToSend = cjBalance
+                assetToSend = new StellarSdk.Asset(config.cjAssetCode, config.cjIssuer)
+            } else if (denomination === 'XLM') {
+                // We want to keep 2.5 XLM in the account
+                amountToSend = math.eval(xlmBalance + -2.5).toString()
+                assetToSend = StellarSdk.Asset.native()
+            }
+
             let transaction = new StellarSdk.TransactionBuilder(accountFromStellar).addOperation(StellarSdk.Operation.payment({
                     destination: toAddress,
-                    asset: cjAsset,
-                    amount: cjBalance,
+                    asset: assetToSend,
+                    amount: amountToSend
                 }))
                 .build();
 
@@ -41,8 +55,8 @@ module.exports = {
                 toPublicKey: toAddress,
                 fromUId: fromUId,
                 link: transactionResult._links.transaction.href,
-                amount: cjBalance,
-                denomination: 'CJ',
+                amount: amountToSend,
+                denomination: denomination,
                 createdAt: new Date().toISOString()
             }
 

@@ -20,7 +20,7 @@ client.on('message', async msg => {
     // Prevent bots from calling the bot
     if (msg.author.bot) return
 
-    if(config.testing){
+    if(config.testing && msg.author.id != config.testerId){
         return helpers.replyToMsg(msg, "Sorry! The gvtipbot is undergoing maintenance at the moment. Please try again later")
     }
 

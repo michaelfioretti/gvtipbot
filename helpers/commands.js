@@ -15,14 +15,27 @@ module.exports = {
             return helpers.replyToMsg(msg, "There was an error creating your withdraw. Please try again.")
         })
 
-        let toAddress = msg.content.split('/withdraw ')[1].trim()
-        let withdrawResponse = await stellar.withdraw(msg.author.id, account, toAddress)
+        let data = msg.content.split('/withdraw ')[1].split(' ')
+        let toAddress = data[0].trim()
+        let denomination = data[1]
+        
+        if(!toAddress || !denomination) {
+            let sentences = [
+                "\nSorry, I couldn't detect what address you are withdrawing to or what denomination!.",
+                "Make sure you format the request with the denomination (currently either GV or XLM), like so: ",
+                "@gvtipbot /withdraw GBTVUCDT5CNSXIHJTDHYSZG3YJFXBAJ6FM4CKS5GKSAWJOLZW6XX7NVC XLM - this would send all but 2.5 of your XLM to GBTVUCDT5CNSXIHJTDHYSZG3YJFXBAJ6FM4CKS5GKSAWJOLZW6XX7NVC"
+            ]
+
+            return helpers.replyToMsg(msg, sentences.join('\n'))
+        }
+
+        let withdrawResponse = await stellar.withdraw(msg.author.id, account, toAddress, denomination)
         .catch(e => {
             console.log("error in withdrawResponse: ", e)
             return helpers.replyToMsg(msg, "There was an error creating your withdraw. Please try again.")
         })
 
-        helpers.replyToMsg(msg, "Your GV balance has successfully been sent to "  + toAddress + '!')
+        helpers.replyToMsg(msg, "Your " + denomination + " has successfully been sent to "  + toAddress + '!')
 
     },
     /**
