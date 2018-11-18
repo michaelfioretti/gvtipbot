@@ -26,6 +26,8 @@ module.exports = {
             return 'verify'
         } else if (message.indexOf('/withdraw') > -1) {
             return 'withdraw'
+        } else if (message.indexOf('/shutup') > -1) {
+            return 'shutup'
         }
     },
     /**

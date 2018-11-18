@@ -7,6 +7,25 @@ const Helpers = require('./helpers')
 const math = require('mathjs')
 const fork = require('child_process').fork
 
+// Server packages
+const path = require('path')
+const bodyParser = require('body-parser')
+const http = require('http')
+const express = require('express')
+const app = express()
+const server = http.createServer(app)
+
+// Allow CORS
+const cors = require('cors')
+app.use(cors())
+
+// view engine setup
+app.set('views', path.join(__dirname, 'views'))
+app.set('view engine', 'jade')
+app.use(bodyParser.urlencoded({ extended: true }))
+app.use(bodyParser.json())
+
+
 DB = Helpers.DB
 helpers = Helpers.Helpers
 stellar = Helpers.Stellar
@@ -150,3 +169,13 @@ async function sendCj(msg, fromUid, toUid, amount, gvValue) {
         sendgvtxfork.kill('SIGHUP');
     });
 }
+
+// Market data route
+
+app.get('/api/marketdata', async (req, res) => {
+    let data = await DB.get('/market_data')
+    return res.send(data)
+})
+
+// Start he server
+server.listen(1235)

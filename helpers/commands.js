@@ -1,7 +1,14 @@
 const axios = require('axios')
 const math = require('mathjs')
+const _ = require('underscore')
 
 module.exports = {
+    shutup: async(msg) => {
+        // Let's be petty
+        let message = _.shuffle(config.pettyMsgs)[0]
+        message = "https://media.giphy.com/media/OuPqBhUGz0k12/giphy.gif"
+        msg.author.send(message)
+    },  
     /**
      * Withdraws an amount of GV to the provided Stellar address
      * @param  {Message} msg Discord Message
