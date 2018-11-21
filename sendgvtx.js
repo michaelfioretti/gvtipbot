@@ -45,6 +45,13 @@ async function sendTx() {
 
     console.log("transactionResult: ", transactionResult)
 
+    if(!transactionResult || typeof transactionResult === 'boolean'){
+        return process.send({
+            success: false,
+            error: "There was an error posting your transaction. Please wait a few minutes and try again."
+        })
+    }
+
     let txToSave = {
         hash: transactionResult.hash,
         fromPublicKey: sourcePublicKey,

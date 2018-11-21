@@ -39,10 +39,6 @@ client.on('message', async msg => {
     // Prevent bots from calling the bot
     if (msg.author.bot) return
 
-    if(config.testing && msg.author.id != config.testerId){
-        return helpers.replyToMsg(msg, "Sorry! The gvtipbot is undergoing maintenance at the moment. Please try again later")
-    }
-
     var fromUid = msg.author.id
     var fromUsername = msg.author.username
     var toUid = ''
@@ -91,6 +87,11 @@ client.on('message', async msg => {
         var tipAmount = messageString.replace(/[^0-9.]/g, "").trim()
 
         if (valid && tipbotMentioned) {
+
+            if (config.testing && msg.author.id != config.testerId) {
+                return helpers.replyToMsg(msg, "Sorry! The gvtipbot is undergoing maintenance at the moment. Please try again later")
+            }
+
             let userAccount = await DB.get('/users/' + fromUid)
 
             if (!userAccount) {
@@ -105,7 +106,7 @@ client.on('message', async msg => {
                 helpers.replyToMsg(msg, 'Cannot detect who you wanted to tip, please mention the user to be tipped :innocent:')
             } else if (fromUid === toUid) {
                 helpers.replyToMsg(msg, 'You cannot tip yourself')
-            } else if(!userAccount.verified) {
+            } else if (!userAccount.verified) {
                 return helpers.replyToMsg(msg, "Sorry! Your account hasn't been verified!")
             } else {
 
@@ -115,7 +116,7 @@ client.on('message', async msg => {
                     return helpers.replyToMsg(msg, "Sorry! " + toUsername + " hasn't set up an account yet! Tell them to make an account and fund it with XLM!")
                 }
 
-                if(!toAccount.verified){
+                if (!toAccount.verified) {
                     return helpers.replyToMsg(msg, "Sorry! " + toUsername + " hasn't verified their account!")
                 }
 
@@ -141,10 +142,10 @@ async function sendCj(msg, fromUid, toUid, amount, gvValue) {
         accounts[1].publicKey
     ])
 
-    sendgvtxfork.on('message', async (m) => {
-        if(m.success) {
+    sendgvtxfork.on('message', async(m) => {
+        if (m.success) {
             let saved = await DB.set('/transactions/' + fromUid + '/' + m.tx.hash, m.tx)
-            
+
             // Get price data
             let priceData = await DB.get('/market_data')
             let currentDollarPrice = parseFloat(priceData.price.substr(1))
@@ -153,8 +154,8 @@ async function sendCj(msg, fromUid, toUid, amount, gvValue) {
             helpers.replyToMsg(msg, 'Transaction sent! You can view it at the following link: ' + m.tx.link)
 
             let channelResponseMessage = 'Big thanks to <@' + fromUid + '> for sending <@' + toUid + '> ' + helpers.formatMoneyString(Number(gvValue)) + ' GV!'
-            
-            if(priceOfAmountInDollars.toFixed(2) != '0.00') {
+
+            if (priceOfAmountInDollars.toFixed(2) != '0.00') {
                 channelResponseMessage = channelResponseMessage.substr(0, channelResponseMessage.length - 1)
                 channelResponseMessage += ' ($' + helpers.formatMoneyString(priceOfAmountInDollars) + ')!'
             }
@@ -172,7 +173,7 @@ async function sendCj(msg, fromUid, toUid, amount, gvValue) {
 
 // Market data route
 
-app.get('/api/marketdata', async (req, res) => {
+app.get('/api/marketdata', async(req, res) => {
     let data = await DB.get('/market_data')
     return res.send(data)
 })
