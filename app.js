@@ -178,7 +178,7 @@ app.get('/api/marketdata', async (req, res) => {
 })
 
 // Used for petty purposes...
-app/get('/api/voicelogs', async (req, res) => {
+app.get('/api/voicelogs', async (req, res) => {
     return res.sendStatus(200);
 })
 
