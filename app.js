@@ -39,7 +39,7 @@ client.on('message', async msg => {
     // Prevent bots from calling the bot
     if (msg.author.bot) return
 
-    if(config.testing && msg.author.id != config.testerId){
+    if (config.testing && msg.author.id != config.testerId) {
         return helpers.replyToMsg(msg, "Sorry! The gvtipbot is undergoing maintenance at the moment. Please try again later")
     }
 
@@ -105,7 +105,7 @@ client.on('message', async msg => {
                 helpers.replyToMsg(msg, 'Cannot detect who you wanted to tip, please mention the user to be tipped :innocent:')
             } else if (fromUid === toUid) {
                 helpers.replyToMsg(msg, 'You cannot tip yourself')
-            } else if(!userAccount.verified) {
+            } else if (!userAccount.verified) {
                 return helpers.replyToMsg(msg, "Sorry! Your account hasn't been verified!")
             } else {
 
@@ -115,7 +115,7 @@ client.on('message', async msg => {
                     return helpers.replyToMsg(msg, "Sorry! " + toUsername + " hasn't set up an account yet! Tell them to make an account and fund it with XLM!")
                 }
 
-                if(!toAccount.verified){
+                if (!toAccount.verified) {
                     return helpers.replyToMsg(msg, "Sorry! " + toUsername + " hasn't verified their account!")
                 }
 
@@ -142,9 +142,9 @@ async function sendCj(msg, fromUid, toUid, amount, gvValue) {
     ])
 
     sendgvtxfork.on('message', async (m) => {
-        if(m.success) {
+        if (m.success) {
             let saved = await DB.set('/transactions/' + fromUid + '/' + m.tx.hash, m.tx)
-            
+
             // Get price data
             let priceData = await DB.get('/market_data')
             let currentDollarPrice = parseFloat(priceData.price.substr(1))
@@ -153,8 +153,8 @@ async function sendCj(msg, fromUid, toUid, amount, gvValue) {
             helpers.replyToMsg(msg, 'Transaction sent! You can view it at the following link: ' + m.tx.link)
 
             let channelResponseMessage = 'Big thanks to <@' + fromUid + '> for sending <@' + toUid + '> ' + helpers.formatMoneyString(Number(gvValue)) + ' GV!'
-            
-            if(priceOfAmountInDollars.toFixed(2) != '0.00') {
+
+            if (priceOfAmountInDollars.toFixed(2) != '0.00') {
                 channelResponseMessage = channelResponseMessage.substr(0, channelResponseMessage.length - 1)
                 channelResponseMessage += ' ($' + helpers.formatMoneyString(priceOfAmountInDollars) + ')!'
             }
@@ -180,6 +180,13 @@ app.get('/api/marketdata', async (req, res) => {
 // Used for petty purposes...
 app.post('/api/voicelogs', async (req, res) => {
     return res.sendStatus(200);
+})
+
+app.get('/api/numberOfTransactions', async (req, res) => {
+    let num = await DB.getAllTxs()
+    return res.status(200).send({
+        numberOfTransactions: num
+    })
 })
 
 // Start he server
